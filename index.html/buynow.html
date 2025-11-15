@@ -1,0 +1,512 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="style.css">
+    <link rel="icon" type="image/jpg" href="image/gus1.jpg">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js" integrity="sha512-894YE6QWD5I59HgZOGReFYm4dnWc1Qt5NtvYSaNcOP+u1T9qYdvdihz0PPSiiqn/+/3e7Jo4EaG7TubfWGUrMQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA==" crossorigin="anonymous" referrerpolicy="no-referrer"/>
+    <title>Checkout - Bike Shop</title> 
+    <style>
+        .checkout-container {
+            max-width: 1200px;
+            margin: 40px auto;
+            padding: 20px;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+        }
+        
+        .checkout-section {
+            background: #fff;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        
+        .checkout-section h2 {
+            color: #f63e4e;
+            margin-bottom: 20px;
+            font-size: 24px;
+        }
+        
+        .product-summary {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            padding: 20px;
+            background: #f9f9f9;
+            border-radius: 8px;
+            margin-bottom: 20px;
+        }
+        
+        .product-summary img {
+            width: 120px;
+            height: 120px;
+            object-fit: cover;
+            border-radius: 8px;
+        }
+        
+        .product-summary-info h3 {
+            margin: 0 0 10px 0;
+            color: #333;
+        }
+        
+        .product-summary-info .price {
+            color: #f63e4e;
+            font-size: 24px;
+            font-weight: bold;
+        }
+        
+        .form-group {
+            margin-bottom: 20px;
+        }
+        
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            color: #333;
+            font-weight: 600;
+        }
+        
+        .form-group input,
+        .form-group select,
+        .form-group textarea {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-size: 14px;
+            box-sizing: border-box;
+        }
+        
+        .form-group textarea {
+            resize: vertical;
+            min-height: 80px;
+        }
+        
+        .delivery-info {
+            background: #f0f8ff;
+            padding: 20px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            border-left: 4px solid #f63e4e;
+        }
+        
+        .delivery-info h3 {
+            color: #f63e4e;
+            margin-top: 0;
+        }
+        
+        .delivery-info ul {
+            margin: 10px 0;
+            padding-left: 20px;
+        }
+        
+        .delivery-info li {
+            margin: 8px 0;
+            color: #555;
+        }
+        
+        .delivery-options {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+        
+        .delivery-option {
+            flex: 1;
+            padding: 15px;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            cursor: pointer;
+            text-align: center;
+            transition: all 0.3s;
+        }
+        
+        .delivery-option:hover {
+            border-color: #f63e4e;
+        }
+        
+        .delivery-option.selected {
+            border-color: #f63e4e;
+            background: #fff5f5;
+        }
+        
+        .delivery-option input {
+            margin-right: 8px;
+        }
+        
+        .order-summary {
+            background: #f9f9f9;
+            padding: 20px;
+            border-radius: 8px;
+        }
+        
+        .summary-row {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 15px;
+            padding-bottom: 15px;
+            border-bottom: 1px solid #ddd;
+        }
+        
+        .summary-row.total {
+            border-bottom: 2px solid #f63e4e;
+            font-size: 20px;
+            font-weight: bold;
+            color: #f63e4e;
+            margin-top: 10px;
+        }
+        
+        .checkout-btn {
+            width: 100%;
+            padding: 15px;
+            background: #f63e4e;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            font-size: 18px;
+            font-weight: bold;
+            cursor: pointer;
+            margin-top: 20px;
+            transition: background 0.3s;
+        }
+        
+        .checkout-btn:hover {
+            background: #d32f2f;
+        }
+        
+        @media (max-width: 768px) {
+            .checkout-container {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <nav class="navbar">
+        <div class="logo"><h1>SHOP</h1></div>
+        <ul class="menu">
+            <li><a href="index.html">Home</a></li>
+            <li><a href="collections.html">Collections</a></li>
+            <li><a href="newarrivals.html">New Arrivals</a></li>
+            <li><a href="bestseller.html">Best Seller</a></li>
+            <li><a href="account.html">Account</a></li>
+            <li><a href="AboutUs.html">About Us</a></li>
+        </ul>
+        <div class="menu-bnt">
+            <i class="fa fa-bars"></i>
+        </div>  
+    </nav>
+
+    <div class="checkout-container">
+        <!-- Left Column: Checkout Form -->
+        <div class="checkout-section">
+            <h2><i class="fas fa-shopping-cart"></i> Checkout</h2>
+            
+            <div class="product-summary" id="productSummary">
+                <img id="productImage" src="" alt="Product">
+                <div class="product-summary-info">
+                    <h3 id="productName">Loading...</h3>
+                    <div class="price" id="productPrice">$0</div>
+                </div>
+            </div>
+
+            <form id="checkoutForm">
+                <h3>Shipping Information</h3>
+                
+                <div class="form-group">
+                    <label for="fullName">Full Name *</label>
+                    <input type="text" id="fullName" name="fullName" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="email">Email Address *</label>
+                    <input type="email" id="email" name="email" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="phone">Phone Number *</label>
+                    <input type="tel" id="phone" name="phone" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="address">Street Address *</label>
+                    <input type="text" id="address" name="address" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="city">City *</label>
+                    <input type="text" id="city" name="city" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="state">State/Province *</label>
+                    <input type="text" id="state" name="state" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="zipCode">ZIP/Postal Code *</label>
+                    <input type="text" id="zipCode" name="zipCode" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="country">Country *</label>
+                    <select id="country" name="country" required>
+                        <option value="">Select Country</option>
+                        <option value="US">United States</option>
+                        <option value="CA">Canada</option>
+                        <option value="UK">United Kingdom</option>
+                        <option value="AU">Australia</option>
+                        <option value="DE">Germany</option>
+                        <option value="FR">France</option>
+                        <option value="IT">Italy</option>
+                        <option value="ES">Spain</option>
+                        <option value="ES">Philippines</option>
+                    </select>
+                </div>
+
+                <h3 style="margin-top: 30px;">Delivery Options</h3>
+                <div class="delivery-options">
+                    <label class="delivery-option">
+                        <input type="radio" name="delivery" value="standard" checked>
+                        <div>
+                            <strong>Standard</strong><br>
+                            <small>5-7 business days</small><br>
+                            <strong>$15</strong>
+                        </div>
+                    </label>
+                    <label class="delivery-option">
+                        <input type="radio" name="delivery" value="express">
+                        <div>
+                            <strong>Express</strong><br>
+                            <small>2-3 business days</small><br>
+                            <strong>$35</strong>
+                        </div>
+                    </label>
+                    <label class="delivery-option">
+                        <input type="radio" name="delivery" value="overnight">
+                        <div>
+                            <strong>Overnight</strong><br>
+                            <small>Next business day</small><br>
+                            <strong>$75</strong>
+                        </div>
+                    </label>
+                </div>
+
+                <div class="form-group">
+                    <label for="notes">Special Instructions (Optional)</label>
+                    <textarea id="notes" name="notes" placeholder="Any special delivery instructions or notes..."></textarea>
+                </div>
+
+                <button type="submit" class="checkout-btn">Complete Purchase</button>
+            </form>
+        </div>
+
+        <!-- Right Column: Delivery Info & Order Summary -->
+        <div>
+            <div class="checkout-section">
+                <h2><i class="fas fa-info-circle"></i> Delivery Information</h2>
+                <div class="delivery-info">
+                    <h3>Shipping & Handling</h3>
+                    <ul>
+                        <li><strong>Free Shipping:</strong> Orders over $500 qualify for free standard shipping</li>
+                        <li><strong>Processing Time:</strong> 1-2 business days for order processing</li>
+                        <li><strong>Delivery Time:</strong> Varies by selected shipping method</li>
+                        <li><strong>Tracking:</strong> You'll receive a tracking number via email once your order ships</li>
+                    </ul>
+                </div>
+
+                <div class="delivery-info">
+                    <h3>Assembly & Setup</h3>
+                    <ul>
+                        <li>Bikes are shipped partially assembled</li>
+                        <li>Professional assembly service available for $50</li>
+                        <li>Assembly instructions included in the box</li>
+                        <li>Video tutorials available on our website</li>
+                    </ul>
+                </div>
+
+                <div class="delivery-info">
+                    <h3>Returns & Warranty</h3>
+                    <ul>
+                        <li>30-day return policy for unused items</li>
+                        <li>2-year manufacturer warranty included</li>
+                        <li>Free return shipping for defective items</li>
+                        <li>Contact support for warranty claims</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="checkout-section">
+                <h2><i class="fas fa-receipt"></i> Order Summary</h2>
+                <div class="order-summary">
+                    <div class="summary-row">
+                        <span>Subtotal:</span>
+                        <span id="subtotal">$0.00</span>
+                    </div>
+                    <div class="summary-row">
+                        <span>Shipping:</span>
+                        <span id="shipping">$15.00</span>
+                    </div>
+                    <div class="summary-row">
+                        <span>Tax:</span>
+                        <span id="tax">$0.00</span>
+                    </div>
+                    <div class="summary-row total">
+                        <span>Total:</span>
+                        <span id="total">$0.00</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <footer>
+        <p>Copyrights at <a href="">Bike Shop</a></p>
+    </footer>
+
+    <script>
+        $(".menu-bnt").click(function (){ 
+            $(".navbar .menu").toggleClass("active");
+            $(".menu-bnt i").toggleClass("active");
+        });
+
+        // Load product information from sessionStorage
+        document.addEventListener('DOMContentLoaded', function() {
+            const productData = JSON.parse(sessionStorage.getItem('selectedProduct') || '{}');
+            
+            if (productData.name) {
+                document.getElementById('productName').textContent = productData.name;
+                document.getElementById('productPrice').textContent = '$' + productData.price.toLocaleString();
+                document.getElementById('productImage').src = productData.image;
+                document.getElementById('productImage').alt = productData.name;
+                
+                updateOrderSummary(productData.price);
+            } else {
+                // If no product selected, redirect back
+                alert('No product selected. Redirecting...');
+                window.location.href = 'newarrivals.html';
+            }
+
+            // Handle delivery option changes
+            const deliveryOptions = document.querySelectorAll('input[name="delivery"]');
+            deliveryOptions.forEach(option => {
+                option.addEventListener('change', function() {
+                    // Update selected class
+                    document.querySelectorAll('.delivery-option').forEach(opt => {
+                        opt.classList.remove('selected');
+                    });
+                    if (this.closest('.delivery-option')) {
+                        this.closest('.delivery-option').classList.add('selected');
+                    }
+                    
+                    // Update shipping cost
+                    const shippingCosts = {
+                        'standard': 15,
+                        'express': 35,
+                        'overnight': 75
+                    };
+                    const selectedCost = shippingCosts[this.value] || 15;
+                    document.getElementById('shipping').textContent = '$' + selectedCost.toFixed(2);
+                    
+                    // Recalculate total
+                    if (productData.price) {
+                        updateOrderSummary(productData.price, selectedCost);
+                    }
+                });
+            });
+
+            // Set initial selected state
+            const initialSelected = document.querySelector('input[name="delivery"]:checked');
+            if (initialSelected && initialSelected.closest('.delivery-option')) {
+                initialSelected.closest('.delivery-option').classList.add('selected');
+            }
+
+            // Handle form submission
+            const checkoutForm = document.getElementById('checkoutForm');
+            if (checkoutForm) {
+                checkoutForm.addEventListener('submit', function(e) {
+                    e.preventDefault();
+                    
+                    // Disable submit button to prevent double submission
+                    const submitBtn = this.querySelector('button[type="submit"]');
+                    if (submitBtn) {
+                        submitBtn.disabled = true;
+                        submitBtn.textContent = 'Processing...';
+                    }
+                    
+                    // Get form data
+                    const formData = new FormData(this);
+                    const delivery = formData.get('delivery');
+                    const shippingCosts = {
+                        'standard': 15,
+                        'express': 35,
+                        'overnight': 75
+                    };
+                    const shipping = shippingCosts[delivery] || 15;
+                    
+                    const productData = JSON.parse(sessionStorage.getItem('selectedProduct') || '{}');
+                    const subtotal = productData.price || 0;
+                    const tax = subtotal * 0.08;
+                    const total = subtotal + shipping + tax;
+                    
+                    // Prepare order data
+                    const orderData = {
+                        fullName: formData.get('fullName'),
+                        email: formData.get('email'),
+                        phone: formData.get('phone'),
+                        address: formData.get('address'),
+                        city: formData.get('city'),
+                        state: formData.get('state'),
+                        zipCode: formData.get('zipCode'),
+                        country: formData.get('country'),
+                        delivery: delivery,
+                        notes: formData.get('notes') || '',
+                        productName: productData.name || 'Product',
+                        productPrice: subtotal,
+                        productImage: productData.image || '',
+                        subtotal: subtotal,
+                        shipping: shipping,
+                        tax: tax,
+                        total: total,
+                        orderNumber: 'ORD-' + Date.now()
+                    };
+                    
+                    // Store order data for thank you page
+                    sessionStorage.setItem('orderData', JSON.stringify({
+                        orderNumber: orderData.orderNumber,
+                        productName: orderData.productName,
+                        subtotal: orderData.subtotal,
+                        shipping: orderData.shipping,
+                        tax: orderData.tax,
+                        total: orderData.total
+                    }));
+                    
+                    // Clear product data
+                    sessionStorage.removeItem('selectedProduct');
+                    
+                    // Redirect to thank you page
+                    window.location.href = 'thanksbuying.html';
+                });
+            }
+        });
+
+        function updateOrderSummary(subtotal, shipping = 15) {
+            const taxRate = 0.08; // 8% tax
+            const tax = subtotal * taxRate;
+            const total = subtotal + shipping + tax;
+            
+            document.getElementById('subtotal').textContent = '$' + subtotal.toFixed(2);
+            document.getElementById('shipping').textContent = '$' + shipping.toFixed(2);
+            document.getElementById('tax').textContent = '$' + tax.toFixed(2);
+            document.getElementById('total').textContent = '$' + total.toFixed(2);
+        }
+    </script>
+
+</body>
+</html>
